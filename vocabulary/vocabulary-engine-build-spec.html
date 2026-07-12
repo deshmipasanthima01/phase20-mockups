@@ -1,0 +1,669 @@
+Exit code: 0
+Wall time: 1.5 seconds
+Output:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive Phase20 vocabulary engine build specification covering spaced repetition, practice formats, word details, and session design.">
+<title>Phase20 — Build Specification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F1E6;
+    --paper-card:#FBF8F0;
+    --line:#D9CCA9;
+    --ink:#2A241C;
+    --ink-soft:#6B6250;
+    --wood:#3E2F22;
+    --wood-dark:#2A1F16;
+    --brass:#A97C2F;
+    --moss:#4B6650;
+    --stamp:#8C2F1F;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:16px;
+    line-height:1.6;
+  }
+  h1,h2,h3,.mono{font-family:'Courier Prime',ui-monospace,Consolas,monospace;}
+  .serif{font-family:'Lora',Georgia,serif;}
+  a{color:inherit;}
+  button{font-family:inherit;cursor:pointer;}
+  :focus-visible{outline:2px solid var(--stamp);outline-offset:2px;}
+  .library-link{position:fixed;z-index:20;top:1rem;right:1rem;padding:.55rem .85rem;border:1px solid var(--brass);border-radius:4px;background:var(--paper-card);color:var(--wood);box-shadow:2px 2px 0 var(--wood-dark);font:700 .72rem/1 'Courier Prime',monospace;letter-spacing:.04em;text-decoration:none;}
+  .library-link:hover{background:#fff;}
+
+  /* ---------- Header / drawer nameplate ---------- */
+  .drawer-header{
+    background:var(--wood);
+    color:var(--paper);
+    padding:2.4rem 1.5rem 2rem;
+    border-bottom:6px solid var(--wood-dark);
+  }
+  .drawer-header__inner{max-width:980px;margin:0 auto;}
+  .nameplate{
+    display:inline-block;
+    border:2px solid var(--brass);
+    padding:.5rem 1rem;
+    font-size:.8rem;
+    letter-spacing:.12em;
+    color:var(--brass);
+    margin-bottom:1rem;
+  }
+  .drawer-header h1{
+    margin:0 0 .5rem;
+    font-size:clamp(1.6rem,3.6vw,2.4rem);
+    letter-spacing:.01em;
+  }
+  .drawer-header p{
+    max-width:640px;
+    color:#E4DCC8;
+    font-size:.98rem;
+    margin:0;
+  }
+
+  main{max-width:980px;margin:0 auto;padding:0 1.5rem 4rem;}
+
+  /* ---------- Sections & guide tabs ---------- */
+  .section{margin-top:3.6rem;}
+  .guide-tab{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    background:var(--wood);
+    color:var(--paper);
+    font-size:.78rem;
+    letter-spacing:.1em;
+    padding:.45rem .9rem;
+    border-radius:2px 8px 2px 2px;
+    margin-bottom:1rem;
+  }
+  .section h2{
+    font-size:1.35rem;
+    margin:.2rem 0 .6rem;
+  }
+  .section > p.lede{
+    max-width:640px;
+    color:var(--ink-soft);
+    margin-bottom:1.6rem;
+  }
+
+  /* ---------- Status tags ---------- */
+  .tag{
+    display:inline-block;
+    font-family:'Courier Prime',monospace;
+    font-size:.68rem;
+    letter-spacing:.08em;
+    padding:.2rem .5rem;
+    border-radius:3px;
+    color:#fff;
+    transform:rotate(-1.5deg);
+    white-space:nowrap;
+  }
+  .tag--new{background:var(--stamp);}
+  .tag--enhance{background:var(--brass);}
+  .tag--existing{background:var(--moss);}
+
+  /* ================= 01 — Checkout card (signature element) ================= */
+  .checkout-card{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    box-shadow:5px 5px 0 var(--line);
+    padding:1.4rem 1.6rem 1.2rem;
+    max-width:660px;
+    position:relative;
+    margin-bottom:1.6rem;
+  }
+  .checkout-card::before{
+    content:"";
+    position:absolute;left:0;top:0;bottom:0;width:5px;
+    background:var(--stamp);opacity:.55;
+  }
+  .checkout-card__title{
+    display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:.4rem;
+    border-bottom:1px dashed var(--line);
+    padding-bottom:.6rem;margin-bottom:.8rem;
+  }
+  .checkout-card__title span.label{font-size:.7rem;color:var(--ink-soft);letter-spacing:.08em;display:block;}
+  .checkout-card__title span.value{font-size:1.05rem;}
+  table.checkout-table{width:100%;border-collapse:collapse;font-size:.86rem;}
+  table.checkout-table th{
+    text-align:left;font-size:.68rem;letter-spacing:.06em;color:var(--ink-soft);
+    padding:.3rem .4rem;border-bottom:1px solid var(--line);font-weight:600;
+  }
+  table.checkout-table td{padding:.45rem .4rem;border-bottom:1px dashed var(--line);}
+  table.checkout-table tr:nth-child(even) td{background:rgba(217,204,169,.28);}
+  .stamp-oval{
+    display:inline-block;padding:.12rem .5rem;border-radius:10px;
+    font-size:.7rem;color:#fff;transform:rotate(-4deg);letter-spacing:.04em;
+  }
+  .stamp-oval.strong{background:var(--moss);}
+  .stamp-oval.ok{background:var(--brass);}
+  .stamp-oval.weak{background:var(--stamp);opacity:.85;}
+  .stamp-oval.fail{background:var(--stamp);}
+
+  .engine-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem;margin:1.2rem 0;}
+  .engine-note{background:var(--paper-card);border:1px solid var(--line);padding:.8rem .9rem;font-size:.86rem;}
+  .engine-note .swatch{width:10px;height:10px;display:inline-block;border-radius:2px;margin-right:.4rem;}
+
+  .memo{
+    border-left:4px solid var(--brass);
+    background:#FBF3E1;
+    padding:.9rem 1.1rem;
+    font-size:.92rem;
+    max-width:660px;
+  }
+
+  pre.code{
+    background:var(--wood-dark);color:#EDE6D3;
+    padding:1rem 1.1rem;border-radius:4px;
+    font-family:'Courier Prime',ui-monospace,Consolas,monospace;
+    font-size:.78rem;line-height:1.55;
+    overflow-x:auto;max-width:660px;margin:1.2rem 0;
+  }
+
+  /* ================= 02 — Activity cards ================= */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.1rem;}
+  .a-card{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    padding:1.1rem 1.2rem 1.3rem;
+    background-image:repeating-linear-gradient(transparent,transparent 27px,rgba(217,204,169,.35) 28px);
+  }
+  .a-card__head{display:flex;align-items:center;gap:.55rem;margin-bottom:.4rem;flex-wrap:wrap;}
+  .a-card__index{
+    width:22px;height:22px;border-radius:50%;background:var(--wood);color:var(--paper);
+    display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-family:'Courier Prime',monospace;
+    flex-shrink:0;
+  }
+  .a-card__head h3{margin:0;font-size:1rem;flex:1;}
+  .a-card__desc{font-size:.85rem;color:var(--ink-soft);margin:.2rem 0 .9rem;}
+  .a-card__demo{background:rgba(255,255,255,.55);border:1px solid var(--line);padding:.8rem;font-size:.88rem;}
+
+  .opt-btn{
+    display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    padding:.5rem .7rem;margin-bottom:.4rem;font-size:.85rem;border-radius:3px;transition:background .15s;
+  }
+  .opt-btn:last-child{margin-bottom:0;}
+  .opt-btn.is-correct{background:var(--moss);color:#fff;border-color:var(--moss);}
+  .opt-btn.is-incorrect{background:var(--stamp);color:#fff;border-color:var(--stamp);}
+
+  .chip-row{display:flex;justify-content:space-between;gap:1rem;}
+  .chip-col{flex:1;display:flex;flex-direction:column;gap:.4rem;}
+  .chip{
+    background:#fff;border:1px solid var(--line);padding:.4rem .6rem;font-size:.82rem;text-align:left;border-radius:3px;
+  }
+  .chip.selected{border-color:var(--wood);box-shadow:0 0 0 1px var(--wood);}
+  .chip.matched{background:var(--moss);color:#fff;border-color:var(--moss);}
+  .chip.shake{animation:shake .3s;}
+  @keyframes shake{25%{transform:translateX(-4px);}75%{transform:translateX(4px);}}
+
+  .sentence-box{width:100%;font-family:'Lora',serif;font-size:.88rem;padding:.6rem .7rem;border:1px solid var(--line);border-radius:3px;resize:vertical;min-height:52px;}
+  .btn{
+    background:var(--wood);color:var(--paper);border:none;padding:.5rem .9rem;font-size:.8rem;
+    letter-spacing:.04em;border-radius:3px;margin-top:.6rem;
+  }
+  .btn:hover{background:var(--wood-dark);}
+  .feedback-panel{
+    display:none;margin-top:.8rem;background:#fff;border-left:3px solid var(--moss);padding:.7rem .8rem;font-size:.83rem;
+  }
+  .feedback-panel.shown{display:block;}
+  .feedback-panel .fix{color:var(--stamp);text-decoration:line-through;}
+  .feedback-panel .good{color:var(--moss);font-weight:600;}
+
+  .audio-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;}
+  .play-btn{
+    width:38px;height:38px;border-radius:50%;background:var(--wood);color:var(--paper);border:none;
+    display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;
+  }
+  .waveform{display:flex;align-items:flex-end;gap:2px;height:20px;}
+  .waveform span{width:3px;background:var(--brass);height:6px;border-radius:1px;}
+  .waveform.playing span{animation:wf 1s ease-in-out infinite;}
+  .waveform span:nth-child(1){animation-delay:0s;} .waveform span:nth-child(2){animation-delay:.1s;}
+  .waveform span:nth-child(3){animation-delay:.2s;} .waveform span:nth-child(4){animation-delay:.3s;}
+  .waveform span:nth-child(5){animation-delay:.4s;} .waveform span:nth-child(6){animation-delay:.5s;}
+  @keyframes wf{0%,100%{height:6px;}50%{height:18px;}}
+  .speed-toggle{display:flex;gap:.3rem;}
+  .speed-btn{background:#fff;border:1px solid var(--line);padding:.3rem .6rem;font-size:.75rem;border-radius:3px;}
+  .speed-btn.active{background:var(--wood);color:var(--paper);border-color:var(--wood);}
+
+  /* ---------- F: Paragraph cloze (mixed vocabulary) ---------- */
+  .paragraph-card{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    padding:1.3rem 1.4rem 1.4rem;
+    margin-top:1.4rem;
+    max-width:820px;
+    background-image:repeating-linear-gradient(transparent,transparent 27px,rgba(217,204,169,.35) 28px);
+  }
+  .paragraph-text{font-family:'Lora',serif;font-size:1rem;line-height:2.1;color:var(--ink);margin:.4rem 0 1rem;}
+  .blank-input{
+    font-family:'Lora',serif;font-size:1rem;border:none;border-bottom:2px solid var(--wood);
+    background:transparent;text-align:center;padding:0 .2rem;color:var(--ink);
+  }
+  .blank-input.correct{border-bottom-color:var(--moss);color:var(--moss);font-weight:600;}
+  .blank-input.incorrect{border-bottom-color:var(--stamp);color:var(--stamp);}
+
+  .para-source-line{font-size:.85rem;color:var(--ink-soft);margin-bottom:1rem;}
+  .status-pill{
+    display:inline-block;font-size:.66rem;padding:.12rem .45rem;border-radius:8px;color:#fff;margin-left:.25rem;
+  }
+  .status-pill.early{background:var(--stamp);opacity:.85;}
+  .status-pill.mid{background:var(--brass);}
+  .status-pill.late{background:var(--moss);}
+
+  table.grading-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:.7rem;}
+  table.grading-table th{text-align:left;font-size:.66rem;letter-spacing:.05em;color:var(--ink-soft);padding:.3rem .4rem;border-bottom:1px solid var(--line);}
+  table.grading-table td{padding:.4rem .4rem;border-bottom:1px dashed var(--line);}
+  table.grading-table tr:nth-child(even) td{background:rgba(217,204,169,.28);}
+
+  .para-result{margin-top:.7rem;font-size:.85rem;font-family:'Courier Prime',monospace;display:none;}
+  .para-result.shown{display:block;}
+
+  /* ================= 03 — Add Word form mockup ================= */
+  .form-mock{background:var(--paper-card);border:1px solid var(--line);padding:1.3rem 1.4rem;max-width:640px;}
+  .f-row{padding:.7rem 0;border-bottom:1px dashed var(--line);}
+  .f-row:last-child{border-bottom:none;}
+  .f-row .f-label{
+    font-size:.72rem;letter-spacing:.06em;color:var(--ink-soft);display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;
+  }
+  .f-row .f-value{
+    background:#fff;border:1px solid var(--line);padding:.45rem .6rem;font-size:.86rem;color:var(--ink-soft);border-radius:3px;
+  }
+  .f-row--new{border:1px dashed var(--brass);background:#FBF3E1;padding:.7rem .8rem;margin:.4rem 0;border-radius:3px;}
+  .f-row--new .f-value{background:#fff;color:var(--ink);}
+
+  /* ================= 04 — Queue ================= */
+  .queue{display:flex;flex-direction:column;gap:.6rem;max-width:700px;}
+  .q-card{
+    display:flex;align-items:center;gap:.9rem;background:var(--paper-card);
+    border:1px solid var(--line);padding:.7rem .9rem;flex-wrap:wrap;
+  }
+  .q-num{
+    width:26px;height:26px;border-radius:50%;background:var(--wood);color:var(--paper);
+    display:flex;align-items:center;justify-content:center;font-size:.78rem;font-family:'Courier Prime',monospace;flex-shrink:0;
+  }
+  .q-word{font-family:'Lora',serif;font-weight:600;min-width:90px;}
+  .q-activity{
+    font-size:.72rem;background:var(--wood);color:var(--paper);padding:.2rem .55rem;border-radius:10px;
+  }
+  .q-why{font-family:'Lora',serif;font-style:italic;color:var(--ink-soft);font-size:.85rem;margin-left:auto;}
+
+  /* ================= Footer legend ================= */
+  .legend{
+    margin-top:3.6rem;background:var(--wood);color:var(--paper);padding:1.8rem 1.6rem;border-radius:4px;
+  }
+  .legend h2{color:var(--paper);font-size:1.1rem;margin-top:0;}
+  .legend-swatches{display:flex;gap:1.6rem;flex-wrap:wrap;margin:.9rem 0 1.2rem;}
+  .legend-swatches div{display:flex;align-items:center;gap:.5rem;font-size:.85rem;}
+  .legend-swatches span.dot{width:12px;height:12px;border-radius:3px;display:inline-block;}
+  .legend p{color:#E4DCC8;font-size:.9rem;max-width:700px;}
+
+  @media (max-width:640px){
+    .chip-row{flex-direction:column;}
+    .q-why{margin-left:0;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<a class="library-link" href="../index.html" aria-label="Return to all Phase20 mockups">← All mockups</a>
+
+<header class="drawer-header">
+  <div class="drawer-header__inner">
+    <span class="nameplate mono">PHASE20 — DEV HANDOFF</span>
+    <h1>Vocabulary Engine — Build Specification</h1>
+    <p class="serif">Four additions to the current app, shown as working mockups: a review-scheduling engine, six new practice activity types (including a paragraph-based cloze across multiple active words), two additions to the Add Word flow, and an interleaved session queue. Tags mark what's new, what's an enhancement, and what already exists.</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ 01 REVIEW ENGINE ============ -->
+  <section class="section" id="engine">
+    <span class="guide-tab mono">01 · REVIEW ENGINE</span>
+    <h2>Spaced-repetition scheduler <span class="tag tag--new">NEW</span></h2>
+    <p class="lede serif">Replaces "practice whenever" with a due-date system. Each word gets an <code>interval</code> (days) and <code>ease</code> (multiplier) that adjust after every session score. Below is a real six-session run for the word "develop."</p>
+
+    <div class="checkout-card">
+      <div class="checkout-card__title">
+        <div><span class="label mono">WORD</span><span class="value serif">develop</span></div>
+        <div><span class="label mono">TRACKING</span><span class="value mono">review_engine.v1</span></div>
+      </div>
+      <table class="checkout-table">
+        <thead><tr><th>#</th><th>Score</th><th>Quality</th><th>Interval</th><th>Ease</th><th>Next due</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>100</td><td><span class="stamp-oval strong">STRONG</span></td><td>1 → 2</td><td>2.4</td><td>+2 days</td></tr>
+          <tr><td>2</td><td>90</td><td><span class="stamp-oval strong">STRONG</span></td><td>2 → 5</td><td>2.5</td><td>+5 days</td></tr>
+          <tr><td>3</td><td>65</td><td><span class="stamp-oval ok">OK</span></td><td>5 → 7</td><td>2.5</td><td>+7 days</td></tr>
+          <tr><td>4</td><td>40</td><td><span class="stamp-oval weak">WEAK</span></td><td>7 → 4</td><td>2.35</td><td>+4 days</td></tr>
+          <tr><td>5</td><td>95</td><td><span class="stamp-oval strong">STRONG</span></td><td>4 → 9</td><td>2.45</td><td>+9 days</td></tr>
+          <tr><td>6</td><td>100</td><td><span class="stamp-oval strong">STRONG</span></td><td>9 → 22</td><td>2.55</td><td>+22 days</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="engine-notes">
+      <div class="engine-note"><span class="swatch" style="background:var(--moss)"></span><strong>Strong (≥85):</strong> interval × ease, ease creeps up.</div>
+      <div class="engine-note"><span class="swatch" style="background:var(--brass)"></span><strong>OK (60–84):</strong> interval × 1.3, ease unchanged.</div>
+      <div class="engine-note"><span class="swatch" style="background:var(--stamp)"></span><strong>Weak (30–59):</strong> interval shrinks (× 0.6), doesn't reset.</div>
+      <div class="engine-note"><span class="swatch" style="background:var(--stamp);opacity:.7"></span><strong>Fail (&lt;30):</strong> interval resets to 1 day.</div>
+    </div>
+
+    <pre class="code">function scheduleNextReview(word, sessionScore):
+    quality = score &gt;= 85 ? "strong" : score &gt;= 60 ? "ok"
+             : score &gt;= 30 ? "weak"   : "fail"
+
+    if quality == "strong":
+        word.interval = round(word.interval * word.ease)
+        word.ease = min(word.ease + 0.1, 2.8)
+    elif quality == "ok":
+        word.interval = round(word.interval * 1.3)
+    elif quality == "weak":
+        word.interval = max(1, round(word.interval * 0.6))
+        word.ease = max(word.ease - 0.15, 1.3)
+    else:
+        word.interval = 1
+        word.ease = max(word.ease - 0.2, 1.3)
+
+    word.next_review_date = today + word.interval
+    return word</pre>
+
+    <div class="memo serif">
+      <strong>Mastery rule change:</strong> currently "ready to master" fires at avg score ≥ 85. Recommend requiring <em>both</em> avg ≥ 85 <em>and</em> interval ≥ 14 days, so a word only masters after the engine has already shown durable recall — not off one lucky session.
+    </div>
+  </section>
+
+  <!-- ============ 02 ACTIVITY TYPES ============ -->
+  <section class="section" id="activities">
+    <span class="guide-tab mono">02 · ACTIVITY TYPES</span>
+    <h2>Six new practice formats</h2>
+    <p class="lede serif">Fill-in-the-blank (existing) tests one word's own forms in isolation. These six cover the other dimensions of "knowing" a word — recognition, matching, usage, production, listening, and reading several words in connected text at once. All are click-to-try below.</p>
+
+    <div class="card-grid">
+
+      <!-- A: Meaning recognition -->
+      <article class="a-card">
+        <div class="a-card__head"><span class="a-card__index">A</span><h3>Meaning Recognition</h3><span class="tag tag--new">NEW</span></div>
+        <p class="a-card__desc">Multiple choice. Low-stakes first exposure or warm-up.</p>
+        <div class="a-card__demo">
+          <p style="margin-top:0"><strong>Which definition matches "resilient"?</strong></p>
+          <button class="opt-btn" data-correct="false">Easily damaged or broken</button>
+          <button class="opt-btn" data-correct="true">Able to recover quickly from difficulties</button>
+          <button class="opt-btn" data-correct="false">Extremely large in size</button>
+        </div>
+      </article>
+
+      <!-- B: Matching -->
+      <article class="a-card">
+        <div class="a-card__head"><span class="a-card__index">B</span><h3>Form–Meaning Matching</h3><span class="tag tag--new">NEW</span></div>
+        <p class="a-card__desc">Batch of due words, interleaved — not one word in isolation.</p>
+        <div class="a-card__demo">
+          <div class="chip-row match-widget">
+            <div class="chip-col">
+              <button class="chip word" data-pair="1">resilient</button>
+              <button class="chip word" data-pair="2">meticulous</button>
+              <button class="chip word" data-pair="3">candid</button>
+            </div>
+            <div class="chip-col">
+              <button class="chip def" data-pair="2">shows great attention to detail</button>
+              <button class="chip def" data-pair="3">honest and direct</button>
+              <button class="chip def" data-pair="1">recovers quickly from difficulty</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- C: Collocation -->
+      <article class="a-card">
+        <div class="a-card__head"><span class="a-card__index">C</span><h3>Collocation / Usage</h3><span class="tag tag--new">NEW</span></div>
+        <p class="a-card__desc">Targets natural use, not just meaning.</p>
+        <div class="a-card__demo">
+          <p style="margin-top:0"><strong>Which sentence is correct?</strong></p>
+          <button class="opt-btn" data-correct="false">The company plans to make a new product line.</button>
+          <button class="opt-btn" data-correct="true">The company plans to develop a new product line.</button>
+        </div>
+      </article>
+
+      <!-- D: Sentence writing + AI feedback -->
+      <article class="a-card">
+        <div class="a-card__head"><span class="a-card__index">D</span><h3>Sentence Writing + AI Feedback</h3><span class="tag tag--enhance">ENHANCE</span></div>
+        <p class="a-card__desc">Highest-effort task; builds on the AI feedback work already underway.</p>
+        <div class="a-card__demo">
+          <p style="margin-top:0"><strong>Write a sentence using "resilient."</strong></p>
+          <textarea class="sentence-box" readonly>My grandmother is very resilient, she never give up even when things is hard.</textarea>
+          <button class="btn" id="checkFeedbackBtn">Check with AI</button>
+          <div class="feedback-panel" id="feedbackPanel">
+            <p style="margin:0 0 .4rem"><span class="good">✓ "resilient" used correctly</span></p>
+            <p style="margin:0 0 .4rem">"never <span class="fix">give</span> up" → <em>gives</em> up (agreement)</p>
+            <p style="margin:0">Suggested: <em>"My grandmother is remarkably resilient — she never gives up, even when things get hard."</em></p>
+          </div>
+        </div>
+      </article>
+
+      <!-- E: Beep the gap -->
+      <article class="a-card">
+        <div class="a-card__head"><span class="a-card__index">E</span><h3>Beep-the-Gap (Listening)</h3><span class="tag tag--enhance">ENHANCE</span></div>
+        <p class="a-card__desc">Already scaffolded in the template picker — currently "coming soon."</p>
+        <div class="a-card__demo">
+          <p style="margin-top:0" class="serif">"The company plans to <strong>[beep]</strong> a new product line next year."</p>
+          <div class="audio-row">
+            <button class="play-btn" id="playBtn" aria-label="Play audio">▶</button>
+            <div class="waveform" id="waveform"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="speed-toggle">
+              <button class="speed-btn active" data-speed="normal">Normal</button>
+              <button class="speed-btn" data-speed="slow">Slow</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- F: Paragraph cloze — mixed vocabulary -->
+    <div class="paragraph-card">
+      <div class="a-card__head" style="margin-bottom:.3rem;">
+        <span class="a-card__index">F</span>
+        <h3>Paragraph Cloze — Mixed Vocabulary</h3>
+        <span class="tag tag--new">NEW</span>
+      </div>
+      <p class="a-card__desc">One connected paragraph draws blanks from several active words at once, not just one word's own forms — mixing words still in progress with ones closer to mastery. Grading checks the whole saved word family, so any grammatically correct form counts, not just the literal word that was saved.</p>
+
+      <p class="para-source-line">Pulled from 3 active words this session: <strong>analyze</strong><span class="status-pill mid">avg 58</span> — used as verb, noun &amp; adjective across three separate blanks — plus <strong>resilient</strong><span class="status-pill early">avg 32 · in progress</span> and <strong>meticulous</strong><span class="status-pill late">avg 81 · near mastery</span>.</p>
+
+      <p class="paragraph-text">Before the team could recommend any changes, they needed to
+        <input class="blank-input" data-blank="1" size="10" aria-label="blank 1, verb form">
+        the survey data closely. Their eventual
+        <input class="blank-input" data-blank="2" size="11" aria-label="blank 2, noun form">
+        revealed a pattern nobody had expected, and it was clear the findings depended on a genuinely
+        <input class="blank-input" data-blank="3" size="13" aria-label="blank 3, adjective form">
+        approach rather than guesswork. Even so, the group stayed
+        <input class="blank-input" data-blank="4" size="11" aria-label="blank 4">
+        through several failed drafts, and it was their
+        <input class="blank-input" data-blank="5" size="13" aria-label="blank 5">
+        checking of every figure that finally made the report airtight.</p>
+
+      <button class="btn" id="checkParaBtn">Check paragraph</button>
+      <div class="para-result" id="paraResult"></div>
+
+      <table class="grading-table">
+        <thead><tr><th>Blank</th><th>From word</th><th>Required form</th><th>Accepted answers</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>analyze</td><td>verb</td><td>analyze, analyse</td></tr>
+          <tr><td>2</td><td>analyze</td><td>noun</td><td>analysis, analyses</td></tr>
+          <tr><td>3</td><td>analyze</td><td>adjective</td><td>analytical</td></tr>
+          <tr><td>4</td><td>resilient</td><td>adjective</td><td>resilient</td></tr>
+          <tr><td>5</td><td>meticulous</td><td>adjective</td><td>meticulous</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 03 CAPTURE FLOW ============ -->
+  <section class="section" id="capture">
+    <span class="guide-tab mono">03 · CAPTURE FLOW</span>
+    <h2>Add Word panel — two new fields</h2>
+    <p class="lede serif">Same panel, same fields as today, plus two additions that push depth of processing at the point of saving a word (self-generated example, personal mnemonic). Existing fields shown for context only.</p>
+
+    <div class="form-mock">
+      <div class="f-row">
+        <div class="f-label mono">DEFINITION <span class="tag tag--existing">EXISTING</span></div>
+        <div class="f-value serif">Paying close attention to detail; very careful and precise</div>
+      </div>
+      <div class="f-row">
+        <div class="f-label mono">AI-SUGGESTED EXAMPLE <span class="tag tag--existing">EXISTING</span></div>
+        <div class="f-value serif">"She was meticulous in her research, checking every source twice."</div>
+      </div>
+
+      <div class="f-row f-row--new">
+        <div class="f-label mono">YOUR OWN EXAMPLE <span class="tag tag--new">NEW</span></div>
+        <div class="f-value serif">"My flatmate is meticulous about labeling every spice jar in alphabetical order."</div>
+      </div>
+
+      <div class="f-row f-row--new">
+        <div class="f-label mono">MNEMONIC / ASSOCIATION <span class="tag tag--new">NEW</span></div>
+        <div class="f-value serif">"Sounds like 'metical' — someone carefully counting coins one by one."</div>
+      </div>
+
+      <div class="f-row">
+        <div class="f-label mono">WORD FAMILY <span class="tag tag--existing">EXISTING</span></div>
+        <div class="f-value">meticulous → meticulously, meticulousness</div>
+      </div>
+    </div>
+
+    <div class="memo serif" style="margin-top:1rem;">
+      <strong>Prediction check (flow-level, not a field):</strong> when a word is added from a pasted text, show the original sentence with the word blanked <em>before</em> the definition — the learner guesses first, then sees the real meaning.
+    </div>
+  </section>
+
+  <!-- ============ 04 SESSION QUEUE ============ -->
+  <section class="section" id="queue">
+    <span class="guide-tab mono">04 · SESSION QUEUE</span>
+    <h2>Interleaved queue builder <span class="tag tag--new">NEW</span></h2>
+    <p class="lede serif">Pulls whatever's due today and mixes activity types — never the same word twice in a row with the same task.</p>
+
+    <div class="queue">
+      <div class="q-card"><span class="q-num">1</span><span class="q-word">resilient</span><span class="q-activity">Meaning recognition</span><span class="q-why">first exposure — easiest task first</span></div>
+      <div class="q-card"><span class="q-num">2</span><span class="q-word">develop</span><span class="q-activity">Fill-in-the-blank</span><span class="q-why">due today, day 7</span></div>
+      <div class="q-card"><span class="q-num">3</span><span class="q-word">meticulous, candid, elusive</span><span class="q-activity">Matching (batch)</span><span class="q-why">interleaves 3 due words</span></div>
+      <div class="q-card"><span class="q-num">4</span><span class="q-word">resilient</span><span class="q-activity">Collocation</span><span class="q-why">2nd touch, different task type</span></div>
+      <div class="q-card"><span class="q-num">5</span><span class="q-word">develop</span><span class="q-activity">Beep-the-gap</span><span class="q-why">not adjacent to item 2</span></div>
+    </div>
+  </section>
+
+  <footer class="legend">
+    <h2 class="mono">Legend &amp; scope summary</h2>
+    <div class="legend-swatches">
+      <div><span class="dot" style="background:var(--stamp)"></span> NEW — net-new build</div>
+      <div><span class="dot" style="background:var(--brass)"></span> ENHANCE — extends something existing</div>
+      <div><span class="dot" style="background:var(--moss)"></span> EXISTING — already in the app</div>
+    </div>
+    <p>For the developer: one new scheduling function (Section 01) sitting on top of existing word/score models; five new activity components plus one already-scaffolded listening mode (Section 02) — including a mixed-vocabulary paragraph cloze whose grading logic reads each blank's required part of speech and checks it against the source word's saved word-family array, not a single fixed string; two new fields and one new pre-reveal flow step on the current Add Word panel (Section 03); one new queue-builder query that mixes due words and activity types instead of the current single-word session (Section 04).</p>
+  </footer>
+
+</main>
+
+<script>
+  // A/C — multiple choice
+  document.querySelectorAll('.opt-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const card = btn.closest('.a-card__demo');
+      card.querySelectorAll('.opt-btn').forEach(b=>{b.disabled=true;});
+      btn.classList.add(btn.dataset.correct==='true' ? 'is-correct' : 'is-incorrect');
+      if(btn.dataset.correct!=='true'){
+        card.querySelector('.opt-btn[data-correct="true"]').classList.add('is-correct');
+      }
+    });
+  });
+
+  // B — matching
+  document.querySelectorAll('.match-widget').forEach(widget=>{
+    let selected = null;
+    widget.querySelectorAll('.chip.word').forEach(w=>{
+      w.addEventListener('click',()=>{
+        if(w.classList.contains('matched'))return;
+        widget.querySelectorAll('.chip.word').forEach(x=>x.classList.remove('selected'));
+        w.classList.add('selected');
+        selected = w;
+      });
+    });
+    widget.querySelectorAll('.chip.def').forEach(d=>{
+      d.addEventListener('click',()=>{
+        if(!selected || d.classList.contains('matched'))return;
+        if(d.dataset.pair === selected.dataset.pair){
+          d.classList.add('matched'); selected.classList.add('matched');
+          selected.classList.remove('selected'); selected=null;
+        } else {
+          d.classList.add('shake');
+          setTimeout(()=>d.classList.remove('shake'),300);
+        }
+      });
+    });
+  });
+
+  // D — AI feedback reveal
+  const fbBtn = document.getElementById('checkFeedbackBtn');
+  if(fbBtn){
+    fbBtn.addEventListener('click',()=>{
+      document.getElementById('feedbackPanel').classList.toggle('shown');
+    });
+  }
+
+  // E — audio mock
+  const playBtn = document.getElementById('playBtn');
+  const wf = document.getElementById('waveform');
+  if(playBtn){
+    playBtn.addEventListener('click',()=>{
+      wf.classList.add('playing');
+      playBtn.textContent='❚❚';
+      setTimeout(()=>{wf.classList.remove('playing'); playBtn.textContent='▶';},1800);
+    });
+  }
+  document.querySelectorAll('.speed-btn').forEach(sb=>{
+    sb.addEventListener('click',()=>{
+      sb.parentElement.querySelectorAll('.speed-btn').forEach(x=>x.classList.remove('active'));
+      sb.classList.add('active');
+    });
+  });
+
+  // F — paragraph cloze: each blank checked against its own accepted word-family forms
+  const paraAnswers = {
+    1:['analyze','analyse'],
+    2:['analysis','analyses'],
+    3:['analytical'],
+    4:['resilient'],
+    5:['meticulous']
+  };
+  const checkParaBtn = document.getElementById('checkParaBtn');
+  if(checkParaBtn){
+    checkParaBtn.addEventListener('click',()=>{
+      let correctCount = 0;
+      document.querySelectorAll('.blank-input').forEach(inp=>{
+        const id = inp.dataset.blank;
+        const val = inp.value.trim().toLowerCase();
+        const ok = paraAnswers[id].includes(val);
+        inp.classList.remove('correct','incorrect');
+        inp.classList.add(ok ? 'correct' : 'incorrect');
+        if(ok) correctCount++;
+      });
+      const resultEl = document.getElementById('paraResult');
+      resultEl.textContent = correctCount + ' / 5 correct — any accepted word-family form counts, graded per blank.';
+      resultEl.classList.add('shown');
+    });
+  }
+</script>
+
+</body>
+</html>
+

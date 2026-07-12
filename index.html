@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive design prototypes for Phase20, a language-learning application.">
+  <title>Phase20 Design Mockups</title>
+  <link rel="stylesheet" href="shared/css/styles.css">
+  <script src="shared/js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#mockups">Skip to mockups</a>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Phase20 mockups home">
+      <span class="brand-mark" aria-hidden="true">P20</span>
+      <span>Phase20 <small>Design Mockups</small></span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#mockups">Explore</a>
+      <a href="shared/mockup-template.html">Template</a>
+      <a href="README.md">Guide</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Phase20 product design library</p>
+        <h1 id="page-title">Ideas you can <span>see, try, and discuss.</span></h1>
+        <p class="hero-summary">A shared home for interactive concepts that shape the Phase20 language-learning experience. Open a prototype to explore an idea before it becomes a finished feature.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#mockups">Browse mockups</a>
+          <a class="button button-secondary" href="shared/mockup-template.html">Open the starter template</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="How to use this library">
+        <span class="hero-card-icon" aria-hidden="true">→</span>
+        <h2>How this works</h2>
+        <ol>
+          <li>Choose an area below.</li>
+          <li>Open a prototype in your browser.</li>
+          <li>Share feedback in its linked Notion feature entry.</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section class="catalogue" id="mockups" aria-labelledby="catalogue-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Prototype catalogue</p>
+          <h2 id="catalogue-title">Explore by product area</h2>
+          <p>These cards are ready to be replaced with live Phase20 concepts as the design library grows.</p>
+        </div>
+        <label class="filter-label" for="area-filter">Show area
+          <select id="area-filter">
+            <option value="all">All areas</option>
+            <option value="learning">Learning experience</option>
+            <option value="support">Support and inclusion</option>
+            <option value="platform">Platform experience</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="card-grid">
+        <article class="prototype-card" data-group="learning">
+          <div class="card-top"><span class="card-icon" aria-hidden="true">Aa</span><span class="status status-ready">Ready for feedback</span></div>
+          <p class="card-area">Vocabulary</p><h3>Vocabulary Engine</h3>
+          <p>A build specification for spaced repetition, six practice formats, richer word details, and interleaved sessions.</p>
+          <dl><div><dt>Status</dt><dd>Interactive mockup</dd></div><div><dt>Updated</dt><dd>12 Jul 2026</dd></div></dl>
+          <a class="card-link" href="vocabulary/vocabulary-engine-build-spec.html">Open prototype <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="prototype-card" data-group="learning">
+          <div class="card-top"><span class="card-icon" aria-hidden="true">▶</span><span class="status status-planned">Planned</span></div>
+          <p class="card-area">Practice Sessions</p><h3>Guided practice flow</h3>
+          <p>Test focused, motivating sessions that adapt to a learner’s progress.</p>
+          <dl><div><dt>Status</dt><dd>Placeholder</dd></div><div><dt>Updated</dt><dd>12 Jul 2026</dd></div></dl>
+          <a class="card-link" href="shared/mockup-template.html">Open placeholder <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="prototype-card" data-group="platform">
+          <div class="card-top"><span class="card-icon" aria-hidden="true">✦</span><span class="status status-planned">Planned</span></div>
+          <p class="card-area">Teacher Tools</p><h3>Teacher workspace concept</h3>
+          <p>Shape useful tools for planning, assigning, and understanding progress.</p>
+          <dl><div><dt>Status</dt><dd>Placeholder</dd></div><div><dt>Updated</dt><dd>12 Jul 2026</dd></div></dl>
+          <a class="card-link" href="shared/mockup-template.html">Open placeholder <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="prototype-card" data-group="learning">
+          <div class="card-top"><span class="card-icon" aria-hidden="true">☺</span><span class="status status-planned">Planned</span></div>
+          <p class="card-area">Student Experience</p><h3>Learner home concept</h3>
+          <p>Explore clear, encouraging journeys across the learner experience.</p>
+          <dl><div><dt>Status</dt><dd>Placeholder</dd></div><div><dt>Updated</dt><dd>12 Jul 2026</dd></div></dl>
+          <a class="card-link" href="shared/mockup-template.html">Open placeholder <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="prototype-card" data-group="platform">
+          <div class="card-top"><span class="card-icon" aria-hidden="true">◎</span><span class="status status-planned">Planned</span></div>
+          <p class="card-area">Onboarding</p><h3>First-time experience</h3>
+          <p>Help new learners and teachers reach a meaningful first success quickly.</p>
+          <dl><div><dt>Status</dt><dd>Placeholder</dd></div><div><dt>Updated</dt><dd>12 Jul 2026</dd></div></dl>
+          <a class="card-link" href="shared/mockup-template.html">Open placeholder <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="prototype-card" data-group="support">
+          <div class="card-top"><span class="card-icon" aria-hidden="true">◐</span><span class="status status-planned">Planned</span></div>
+          <p class="card-area">Accessibility</p><h3>Inclusive learning patterns</h3>
+          <p>Make Phase20 more usable across different needs, devices, and contexts.</p>
+          <dl><div><dt>Status</dt><dd>Placeholder</dd></div><div><dt>Updated</dt><dd>12 Jul 2026</dd></div></dl>
+          <a class="card-link" href="shared/mockup-template.html">Open placeholder <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="prototype-card" data-group="platform">
+          <div class="card-top"><span class="card-icon" aria-hidden="true">◇</span><span class="status status-planned">Planned</span></div>
+          <p class="card-area">General UX</p><h3>Shared experience improvements</h3>
+          <p>Try navigation, feedback, account, and cross-product interaction ideas.</p>
+          <dl><div><dt>Status</dt><dd>Placeholder</dd></div><div><dt>Updated</dt><dd>12 Jul 2026</dd></div></dl>
+          <a class="card-link" href="shared/mockup-template.html">Open placeholder <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+      <p class="empty-state" id="empty-state" hidden>No mockup areas match this filter yet.</p>
+    </section>
+
+    <section class="contribute" aria-labelledby="contribute-title">
+      <div><p class="eyebrow">Add your next idea</p><h2 id="contribute-title">Turn a feature concept into something people can try.</h2></div>
+      <p>Copy the reusable template into the right product folder, customise it, and add a card here. The README provides a simple step-by-step guide.</p>
+      <a class="button button-light" href="README.md#adding-a-new-mockup">Read the guide</a>
+    </section>
+  </main>
+
+  <footer><p><strong>Phase20</strong> Design Mockups</p><p>Exploring better language-learning experiences, one idea at a time.</p></footer>
+</body>
+</html>
