@@ -35,7 +35,7 @@ If a concept spans several areas, choose one primary folder and mention related 
 
 ## Notion context
 
-The connected Phase20 Notion workspace contains `Design & Feature Ideas`, its `Features` documentation database, and the `Feature & Design Tracker` pipeline.
+The connected Phase20 Notion workspace contains `Design & Feature Ideas` and its `Feature & Design Tracker` database. The tracker provides multiple views, including the status-based `Feature Pipeline`, a browsable `Features` table, and a filtered `Ready for handoff` view.
 
 - When a request concerns an existing feature, design decision, requirement, or tracker entry, search these relevant Notion areas before making assumptions.
 - Do not search the entire Notion workspace without a task-related reason.
@@ -48,7 +48,7 @@ The connected Phase20 Notion workspace contains `Design & Feature Ideas`, its `F
 
 ## Feature documentation and developer handoff
 
-When a feature is ready for a developer to pick up, document it in the `Features` database under `Design & Feature Ideas`. Keep that documentation page as the detailed source of truth and link it to the matching `Feature & Design Tracker` pipeline entry. The tracker should remain a concise status record with summary, documentation, prototype, and implementation-plan links rather than duplicating the full specification.
+When a feature is ready for a developer to pick up, document it in its existing `Feature & Design Tracker` record under `Design & Feature Ideas`. Each database record is both a pipeline card and the detailed feature page, so do not create a second documentation record. Use the tracker views to browse the same records by pipeline status or documentation readiness.
 
 The handoff page should include:
 
@@ -62,7 +62,7 @@ The handoff page should include:
 - testable acceptance criteria
 - decisions, open questions, assumptions, and a short changelog
 
-Keep the feature name, product area, pipeline status, documentation status, short description, prototype URL, and repository path consistent between the Features record, tracker entry, and this repository. Read both linked Notion records before changing either; do not search the entire workspace without a task-related reason, and do not invent Notion links or requirements. If the feature is approved for implementation, create a linked implementation plan and developer tasks from the completed handoff rather than mixing unfinished ideas into the acceptance criteria.
+Keep the feature name, product area, status, short description, prototype URL, and repository path consistent between the tracker record and this repository. Read the relevant tracker record before changing it; do not search the entire workspace without a task-related reason, and do not invent Notion links or requirements. If the feature is approved for implementation, create a linked implementation plan and developer tasks from the completed handoff rather than mixing unfinished ideas into the acceptance criteria.
 
 ## Workflow for a new mockup
 
