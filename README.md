@@ -30,13 +30,13 @@ Each category contains a short README so the folder remains visible before its f
 
 Use the public [feature workflow guide](user-guide.html) when moving an idea from exploration to developer handoff:
 
-1. Find or create the matching feature page under **Design & Feature Ideas** in Notion.
+1. Find or create the matching pipeline entry in **Feature & Design Tracker** under **Design & Feature Ideas** in Notion.
 2. Build and refine the interactive prototype in the most appropriate product-area folder.
-3. When the behaviour is ready for review, document the user journey, screen states, requirements, edge cases, accessibility expectations, and testable acceptance criteria on that same Notion page.
-4. Add the GitHub Pages prototype URL and repository file path to the Notion page, then keep the matching **Feature & Design Tracker** entry consistent.
+3. When the behaviour is ready for review, create or update its detailed page in the **Features** documentation database with the user journey, screen states, requirements, edge cases, accessibility expectations, and testable acceptance criteria.
+4. Add the GitHub Pages prototype URL and repository file path to the documentation page, then link it to the matching **Feature & Design Tracker** entry and keep both records consistent.
 5. When approved for implementation, create a linked implementation plan and developer tasks from the completed handoff.
 
-Notion is the feature-spec and developer-handoff source of truth. This repository is the interactive prototype source. Do not duplicate a feature across multiple Notion pages, and do not invent decisions or requirements that are not supported by the feature context.
+The Notion **Features** database is the detailed feature-spec and developer-handoff source of truth. The **Feature & Design Tracker** is the pipeline source of truth. This repository is the interactive prototype source. Link these records instead of duplicating the full specification, and do not invent decisions or requirements that are not supported by the feature context.
 
 ## Adding a new mockup
 
