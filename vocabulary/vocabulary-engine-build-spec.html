@@ -315,6 +315,9 @@ Output:
   @media (prefers-reduced-motion:reduce){
     *{animation:none !important;transition:none !important;}
   }
+  .handoff-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:.65rem 1.4rem;padding:.75rem 1rem;border-bottom:1px solid var(--rule);background:var(--paper);font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;}
+  .handoff-meta strong{color:var(--ink);}
+  .handoff-meta a{color:var(--stamp);font-weight:700;}
 </style>
 </head>
 <body>
@@ -327,6 +330,13 @@ Output:
     <p class="serif">Four additions to the current app, shown as working mockups: a review-scheduling engine, six new practice activity types (including a paragraph-based cloze across multiple active words), two additions to the Add Word flow, and an interleaved session queue. Tags mark what's new, what's an enhancement, and what already exists.</p>
   </div>
 </header>
+
+<aside class="handoff-meta" aria-label="Prototype handoff details">
+  <span><strong>Status:</strong> Ready for feedback</span>
+  <span><strong>Updated:</strong> 13 July 2026</span>
+  <span><strong>Notion:</strong> <a href="https://app.notion.com/p/39b4433581618145b767f1f9d468fa7c">Vocabulary Engine developer handoff</a></span>
+  <span><strong>Scope:</strong> Proof-of-concept assumption</span>
+</aside>
 
 <main>
 
@@ -666,4 +676,3 @@ Output:
 
 </body>
 </html>
-
