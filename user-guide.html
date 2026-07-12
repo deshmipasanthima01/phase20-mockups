@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Phase20 feature workflow from idea to prototype to developer handoff.">
+  <title>Feature workflow guide — Phase20</title>
+  <link rel="stylesheet" href="shared/css/styles.css">
+  <script src="shared/js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#guide">Skip to guide</a>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Phase20 mockups home"><span class="brand-mark" aria-hidden="true">P20</span><span>Phase20 <small>Design Mockups</small></span></a>
+    <nav aria-label="Guide navigation"><a href="index.html">← All mockups</a><a href="shared/mockup-template.html">Template</a></nav>
+  </header>
+  <main class="prototype-shell" id="guide">
+    <section class="prototype-intro" aria-labelledby="page-title">
+      <p class="eyebrow">Phase20 working guide · Design to development</p>
+      <h1 id="page-title">From feature idea to developer handoff</h1>
+      <p class="hero-summary">Use this workflow to turn a learner or teacher need into an interactive prototype, a clear Notion feature specification, and implementation-ready tasks.</p>
+    </section>
+    <section class="guide-callout" aria-labelledby="source-title"><h2 id="source-title">Keep the sources clear</h2><p><strong>Notion</strong> is the feature-spec and developer-handoff source of truth. <strong>This repository</strong> is the interactive prototype source. Keep the feature name, status, description, links, and decisions consistent between them.</p></section>
+    <section class="guide-section" aria-labelledby="workflow-title"><p class="eyebrow">The repeatable workflow</p><h2 id="workflow-title">Five stages from idea to build</h2>
+      <ol class="workflow-list">
+        <li><span class="workflow-number">1</span><div><h3>Start with the feature context</h3><p>Find or create the matching page under <strong>Design &amp; Feature Ideas</strong>. Check the related <strong>Feature &amp; Design Tracker</strong> entry before making assumptions.</p></div></li>
+        <li><span class="workflow-number">2</span><div><h3>Explore the experience</h3><p>Choose one primary product-area folder, copy the reusable template when useful, and build the key learner or teacher journey as an interactive prototype.</p></div></li>
+        <li><span class="workflow-number">3</span><div><h3>Make it ready for feedback</h3><p>Test the main flow, keyboard access, focus states, mobile layout, reduced motion, relative links, and basic HTML and JavaScript integrity.</p></div></li>
+        <li><span class="workflow-number">4</span><div><h3>Document the behaviour in Notion</h3><p>Update the same feature page with the user journey, screen states, requirements, edge cases, accessibility expectations, prototype links, and testable acceptance criteria.</p></div></li>
+        <li><span class="workflow-number">5</span><div><h3>Prepare the developer handoff</h3><p>When the feature is approved, create a linked implementation plan and focused developer tasks. Keep unfinished ideas and open questions visible instead of hiding them in acceptance criteria.</p></div></li>
+      </ol>
+    </section>
+    <section class="guide-section" aria-labelledby="notion-title"><p class="eyebrow">Notion feature page</p><h2 id="notion-title">What the developer should be able to find</h2>
+      <div class="guide-grid"><article class="guide-card"><h3>Why and who</h3><ul><li>Feature summary and user need</li><li>Goals and non-goals</li><li>Learner or teacher journey</li><li>Primary action and expected outcome</li></ul></article><article class="guide-card"><h3>What it does</h3><ul><li>Screen-by-screen behaviour</li><li>Functional requirements and content rules</li><li>Loading, empty, error, and interrupted states</li><li>Data or permissions needed</li></ul></article><article class="guide-card"><h3>How to validate it</h3><ul><li>Keyboard and screen-reader expectations</li><li>Responsive and reduced-motion behaviour</li><li>Testable acceptance criteria</li><li>Decisions, assumptions, and open questions</li></ul></article></div>
+    </section>
+    <section class="guide-section" aria-labelledby="links-title"><p class="eyebrow">Always include</p><h2 id="links-title">Links and status</h2><ul class="guide-checklist"><li>Live GitHub Pages prototype URL</li><li>Repository file path and product area</li><li>Matching Notion tracker entry</li><li>Current standard status: Planned, Early concept, In progress, Ready for feedback, or Archived</li><li>Short changelog showing what changed and when</li></ul></section>
+    <section class="guide-section guide-next" aria-labelledby="prompt-title"><h2 id="prompt-title">A simple request to use with Codex</h2><p>“Document the <em>[feature name]</em> prototype in Notion for developer handoff.”</p><p>Codex should inspect the relevant Notion feature and repository prototype, update the matching page, add the live URL, and report any missing decisions or open questions without inventing requirements.</p></section>
+  </main>
+  <footer><p><strong>Phase20</strong> Design Mockups</p><p>Ideas you can see, try, and discuss.</p></footer>
+</body>
+</html>

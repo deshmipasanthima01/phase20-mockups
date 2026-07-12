@@ -46,6 +46,24 @@ The connected Phase20 Notion workspace contains `Design & Feature Ideas` and `Fe
 - Keep the feature name, status, and short description consistent between Notion and the repository catalogue.
 - Never invent Notion URLs, page IDs, decisions, or requirements.
 
+## Feature documentation and developer handoff
+
+When a feature is ready for a developer to pick up, document it in the matching Notion page under `Design & Feature Ideas`. Keep one feature page as the source of truth and link it to the matching `Feature & Design Tracker` entry rather than creating duplicate feature records.
+
+The handoff page should include:
+
+- feature summary, user need, goals, and non-goals
+- learner or teacher journey, including the primary action
+- live GitHub Pages prototype URL and repository file path
+- screen-by-screen behaviour, states, and expected outcomes
+- functional requirements, content rules, and data needed
+- empty, loading, error, interrupted, and repeated-action states
+- keyboard, focus, screen-reader, responsive, and reduced-motion expectations
+- testable acceptance criteria
+- decisions, open questions, assumptions, and a short changelog
+
+Keep the feature name, product area, status, short description, prototype URL, and repository path consistent between Notion and this repository. Read the relevant Notion feature entry before documenting or changing it; do not search the entire workspace without a task-related reason, and do not invent Notion links or requirements. If the feature is approved for implementation, create a linked implementation plan and developer tasks from the completed handoff rather than mixing unfinished ideas into the acceptance criteria.
+
 ## Workflow for a new mockup
 
 1. Read `README.md` and this file, then inspect relevant existing mockups.

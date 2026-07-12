@@ -26,6 +26,18 @@ phase20-mockups/
 
 Each category contains a short README so the folder remains visible before its first prototype is added.
 
+## Feature-to-development workflow
+
+Use the public [feature workflow guide](user-guide.html) when moving an idea from exploration to developer handoff:
+
+1. Find or create the matching feature page under **Design & Feature Ideas** in Notion.
+2. Build and refine the interactive prototype in the most appropriate product-area folder.
+3. When the behaviour is ready for review, document the user journey, screen states, requirements, edge cases, accessibility expectations, and testable acceptance criteria on that same Notion page.
+4. Add the GitHub Pages prototype URL and repository file path to the Notion page, then keep the matching **Feature & Design Tracker** entry consistent.
+5. When approved for implementation, create a linked implementation plan and developer tasks from the completed handoff.
+
+Notion is the feature-spec and developer-handoff source of truth. This repository is the interactive prototype source. Do not duplicate a feature across multiple Notion pages, and do not invent decisions or requirements that are not supported by the feature context.
+
 ## Adding a new mockup
 
 1. Choose the category that best matches the feature.
@@ -35,7 +47,7 @@ Each category contains a short README so the folder remains visible before its f
 5. Build the prototype inside the **Prototype canvas** section. Shared images belong in `shared/images/`.
 6. Add or replace a card in the root `index.html`. Set its link to the new file, for example `vocabulary/smart-review.html`.
 7. Open the landing page and test the prototype at both desktop and mobile widths.
-8. Commit the changes, then paste the GitHub Pages prototype URL into the corresponding Notion feature entry.
+8. Validate the prototype, commit and push the requested changes to `main`, then paste the GitHub Pages prototype URL into the corresponding Notion feature entry.
 
 Suggested status labels are **Early concept**, **In progress**, **Ready for feedback**, and **Archived**.
 
