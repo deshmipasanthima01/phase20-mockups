@@ -367,32 +367,87 @@
     .tool-map {
       display: grid;
       grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 11px;
+      gap: 12px;
     }
-    .tool-card {
-      border: 1px solid var(--line);
-      border-radius: 16px;
+    .tool-group {
+      min-width: 0;
       padding: 14px;
-      background: #fbfcfe;
-      transition: .2s ease;
-      cursor: pointer;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, #fbfcff, #f7f9fc);
     }
-    .tool-card:hover, .tool-card.selected { border-color: #bdb5ff; background: var(--primary-soft); transform: translateY(-2px); }
-    .tool-top { display: flex; align-items: center; gap: 9px; }
-    .tool-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 11px; background: white; font-size: 1.05rem; }
-    .tool-card strong { font-size: .92rem; }
-    .tool-card span { display: block; color: var(--muted); font-size: .77rem; margin-top: 5px; line-height: 1.4; }
+    .tool-group-heading {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 11px;
+    }
+    .tool-group-number {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      color: var(--primary-strong);
+      background: var(--primary-soft);
+      font-size: .72rem;
+      font-weight: 900;
+    }
+    .tool-group-heading h5 { margin: 1px 0 2px; font-size: .9rem; }
+    .tool-group-heading p { margin: 0; color: var(--muted); font-size: .73rem; line-height: 1.35; }
+    .tool-options { display: grid; gap: 7px; }
+    .tool-card {
+      position: relative;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 11px;
+      background: white;
+      color: var(--ink);
+      text-align: left;
+      transition: .2s ease;
+    }
+    .tool-card:hover { border-color: #bdb5ff; transform: translateY(-1px); }
+    .tool-card.selected {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      box-shadow: 0 0 0 2px rgba(95,79,232,.08);
+    }
+    .tool-word-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .tool-word { font-size: .96rem; letter-spacing: -.01em; }
+    .tool-grammar {
+      flex: 0 0 auto;
+      padding: 3px 6px;
+      border-radius: 999px;
+      color: var(--primary-strong);
+      background: var(--primary-soft);
+      font-size: .61rem;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .tool-card.selected .tool-grammar { background: white; }
+    .tool-job { display: block; margin-top: 4px; color: var(--muted); font-size: .72rem; line-height: 1.35; }
     .tool-detail {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 18px;
       margin-top: 14px;
-      min-height: 116px;
-      padding: 16px;
+      min-height: 126px;
+      padding: 18px;
       border-radius: 16px;
       background: linear-gradient(145deg, #f7f5ff, #f3fbfa);
-      border: 1px dashed #c9c2fa;
+      border: 1px solid #d1cbfb;
     }
-    .tool-detail h5 { margin: 0 0 7px; font-size: 1.08rem; }
+    .tool-detail-copy { min-width: 0; }
+    .detail-kicker { display: block; margin-bottom: 5px; color: var(--primary); font-size: .66rem; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
+    .tool-detail h5 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 7px; font-size: 1.15rem; }
     .tool-detail p { margin: 0; color: var(--muted); line-height: 1.55; }
-    .example-chip { display: inline-flex; align-items: center; gap: 6px; margin-top: 11px; padding: 7px 10px; border-radius: 999px; background: white; border: 1px solid var(--line); font-size: .82rem; }
+    .detail-grammar { padding: 4px 7px; border-radius: 999px; color: var(--primary-strong); background: white; font-size: .66rem; font-weight: 900; text-transform: uppercase; }
+    .example-chip { display: inline-flex; align-items: center; gap: 7px; max-width: 270px; padding: 9px 11px; border-radius: 12px; background: white; border: 1px solid var(--line); color: var(--ink); font-size: .8rem; font-weight: 750; text-align: left; line-height: 1.35; }
+    .example-chip:hover { border-color: var(--primary); }
 
     .chip-bank, .drop-zone, .match-bank { display: flex; flex-wrap: wrap; gap: 9px; }
     .word-chip, .match-chip {
@@ -612,6 +667,8 @@
       .topbar { align-items: flex-start; }
       .top-actions .status-pill { display: none; }
       .tool-map { grid-template-columns: 1fr; }
+      .tool-detail { grid-template-columns: 1fr; }
+      .example-chip { max-width: none; width: 100%; }
       .sort-grid { grid-template-columns: 1fr 1fr; }
       .match-layout { grid-template-columns: 1fr; }
       .distinction-row { grid-template-columns: 1fr; gap: 5px; }
@@ -735,13 +792,13 @@
             <div class="activity-grid">
               <article class="activity-card span-7" data-activity="tools">
                 <div class="activity-header">
-                  <div><div class="eyebrow">Language tools</div><h4>What job does each word perform?</h4><p>Tap a tool. The formal grammar label appears after the communicative function.</p></div>
+                  <div><div class="eyebrow">Language tools</div><h4>Choose the meaning you need</h4><p>See how the DECIDE family changes to express an action, result, quality, difficulty, person or process.</p></div>
                   <div class="activity-number">1</div>
                 </div>
                 <div class="tool-map" id="toolMap"></div>
                 <div class="tool-detail" id="toolDetail" aria-live="polite">
-                  <h5>Select a language tool</h5>
-                  <p>Start with the meaning you want to communicate—not a grammar rule.</p>
+                  <div class="tool-detail-copy"><span class="detail-kicker">Explore a word</span><h5>Select a form above</h5>
+                  <p>Choose by purpose, then see the word in a natural sentence.</p></div>
                 </div>
               </article>
 
@@ -919,14 +976,21 @@
 
   <script>
     const familyTools = [
-      { word: 'decide', job: 'Perform the action', grammar: 'verb', icon: '⚡', example: 'We need to decide today.', note: 'Use it to express choosing after considering options.' },
-      { word: 'decision', job: 'Name the choice or result', grammar: 'noun', icon: '📌', example: 'The final decision was difficult.', note: 'Common patterns: make a decision, reach a decision, a decision about/on.' },
-      { word: 'decisive', job: 'Describe confidence or a determining effect', grammar: 'adjective', icon: '🎯', example: 'She took decisive action.', note: 'It can describe a person/action that is firm, or something that settles an outcome.' },
-      { word: 'decisively', job: 'Describe how someone acts', grammar: 'adverb', icon: '➜', example: 'The manager acted decisively.', note: 'It commonly modifies act, respond, win and deal with.' },
-      { word: 'indecisive', job: 'Describe difficulty choosing', grammar: 'adjective', icon: '↔', example: 'He remained indecisive.', note: 'It describes a person or response that does not reach a clear choice.' },
-      { word: 'indecision', job: 'Name the difficulty', grammar: 'noun', icon: '⏳', example: 'Her indecision delayed the project.', note: 'It names the state or period of being unable to decide.' },
-      { word: 'decision-maker', job: 'Name the person with responsibility', grammar: 'person noun', icon: '👤', example: 'The final decision-maker approved the plan.', note: 'Use it for someone authorised to make an important choice.' },
-      { word: 'decision-making', job: 'Name the process or describe it', grammar: 'noun / adjective', icon: '🧭', example: 'Good decision-making takes time.', note: 'It can name the process or modify another noun: decision-making process.' }
+      { word: 'decide', job: 'Choose between options', grammar: 'verb', group: 'choice', example: 'We need to decide today.', note: 'Use it for the action of choosing after considering options.' },
+      { word: 'decision', job: 'The choice or result', grammar: 'noun', group: 'choice', example: 'The final decision was difficult.', note: 'Use it to name the choice or result. Common patterns include make a decision and reach a decision.' },
+      { word: 'decision-making', job: 'The process of choosing', grammar: 'noun / adj.', group: 'choice', example: 'Good decision-making takes time.', note: 'Use it to name the process, or to describe another noun: decision-making process.' },
+      { word: 'decisive', job: 'Firm or outcome-settling', grammar: 'adjective', group: 'confidence', example: 'She took decisive action.', note: 'Use it to describe a confident action, or something that clearly settles an outcome.' },
+      { word: 'decisively', job: 'In a firm, clear way', grammar: 'adverb', group: 'confidence', example: 'The manager acted decisively.', note: 'Use it to describe how someone acts, responds, wins or deals with something.' },
+      { word: 'indecisive', job: 'Unable to choose clearly', grammar: 'adjective', group: 'difficulty', example: 'He remained indecisive.', note: 'Use it to describe a person or response that does not reach a clear choice.' },
+      { word: 'indecision', job: 'Difficulty choosing', grammar: 'noun', group: 'difficulty', example: 'Her indecision delayed the project.', note: 'Use it to name the state or period of being unable to decide.' },
+      { word: 'decision-maker', job: 'The person responsible', grammar: 'person noun', group: 'responsibility', example: 'The final decision-maker approved the plan.', note: 'Use it for the person or group authorised to make an important choice.' }
+    ];
+
+    const toolGroups = [
+      { id: 'choice', number: '01', title: 'Make or name a choice', hint: 'Action, result and process' },
+      { id: 'confidence', number: '02', title: 'Show confident action', hint: 'Quality and manner' },
+      { id: 'difficulty', number: '03', title: 'Show difficulty choosing', hint: 'Description and state' },
+      { id: 'responsibility', number: '04', title: 'Name who is responsible', hint: 'Person with authority' }
     ];
 
     const sessions = [
@@ -1031,22 +1095,38 @@
 
     function renderToolMap() {
       const map = document.getElementById('toolMap');
-      familyTools.forEach((tool, index) => {
-        const card = document.createElement('div');
-        card.className = 'tool-card';
-        card.tabIndex = 0;
-        card.innerHTML = `<div class="tool-top"><div class="tool-icon">${tool.icon}</div><div><strong>${tool.job}</strong><span>${tool.word}</span></div></div>`;
-        const select = () => {
-          document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('selected'));
-          card.classList.add('selected');
-          document.getElementById('toolDetail').innerHTML = `<h5>${tool.word} <span style="font-size:.76rem;color:var(--primary);background:var(--primary-soft);padding:4px 7px;border-radius:999px">${tool.grammar}</span></h5><p>${tool.note}</p><button class="example-chip" data-speak="${tool.example}">🔊 ${tool.example}</button>`;
-          document.querySelector('[data-speak]').addEventListener('click', e => speak(e.currentTarget.dataset.speak));
-          markActivity('tools');
-        };
-        card.addEventListener('click', select);
-        card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') select(); });
-        map.appendChild(card);
+      let firstSelection;
+      toolGroups.forEach(group => {
+        const section = document.createElement('section');
+        section.className = 'tool-group';
+        section.setAttribute('aria-labelledby', `tool-group-${group.id}`);
+        section.innerHTML = `<div class="tool-group-heading"><span class="tool-group-number">${group.number}</span><div><h5 id="tool-group-${group.id}">${group.title}</h5><p>${group.hint}</p></div></div><div class="tool-options"></div>`;
+        const options = section.querySelector('.tool-options');
+        familyTools.filter(tool => tool.group === group.id).forEach(tool => {
+          const card = document.createElement('button');
+          card.type = 'button';
+          card.className = 'tool-card';
+          card.setAttribute('aria-pressed', 'false');
+          card.setAttribute('aria-controls', 'toolDetail');
+          card.innerHTML = `<span class="tool-word-row"><strong class="tool-word">${tool.word}</strong><span class="tool-grammar">${tool.grammar}</span></span><span class="tool-job">${tool.job}</span>`;
+          const select = (trackProgress = true) => {
+            map.querySelectorAll('.tool-card').forEach(item => {
+              item.classList.remove('selected');
+              item.setAttribute('aria-pressed', 'false');
+            });
+            card.classList.add('selected');
+            card.setAttribute('aria-pressed', 'true');
+            document.getElementById('toolDetail').innerHTML = `<div class="tool-detail-copy"><span class="detail-kicker">Meaning in context</span><h5>${tool.word} <span class="detail-grammar">${tool.grammar}</span></h5><p>${tool.note}</p></div><button class="example-chip" type="button" data-speak="${tool.example}" aria-label="Hear example: ${tool.example}"><span aria-hidden="true">🔊</span><span>${tool.example}</span></button>`;
+            document.querySelector('#toolDetail [data-speak]').addEventListener('click', event => speak(event.currentTarget.dataset.speak));
+            if (trackProgress) markActivity('tools');
+          };
+          card.addEventListener('click', () => select(true));
+          firstSelection ||= () => select(false);
+          options.appendChild(card);
+        });
+        map.appendChild(section);
       });
+      firstSelection?.();
     }
 
     function renderSort() {
